@@ -8,6 +8,8 @@ The button appears in the Discord toolbar next to
 [DynamicBackgrounds](https://github.com/Enjuchan/DynamicBackgrounds), and only
 while the Lovelace theme is enabled.
 
+<img src="screenshots/panel.png" width="330" alt="The settings panel">
+
 ---
 
 ## What it does
@@ -25,6 +27,13 @@ Five presets are included: Lovelace, Frost, Ember, Moss and Amethyst.
 **Adjustments** - panel width, fill opacity, blur for menus and lists,
 background blur and brightness, Spotify cover treatment. Every slider gets a
 reset button once it differs from the default.
+
+Every change applies live. The panel open over Discord, with the default
+colours and with the Moss preset:
+
+![The panel open in Discord](screenshots/in-app.jpg)
+
+![The Moss preset applied](screenshots/moss.jpg)
 
 ---
 
