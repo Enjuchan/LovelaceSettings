@@ -8,6 +8,30 @@ Versioning follows [Semantic Versioning](https://semver.org):
 
 ---
 
+## 1.5.0
+
+### Added
+
+- **Glow from background**, a new switch under Glow. With it on, the two glow
+  colours are taken from whatever image
+  [DynamicBackgrounds](https://github.com/Enjuchan/DynamicBackgrounds) is
+  currently showing, and they follow every change: the slideshow, picking an
+  image by hand, even the hover preview in the manager.
+
+  Your own two colours are not lost. They stay set and become the fallback, so
+  turning the switch off puts them straight back.
+
+  Nothing here polls or observes anything. The plugin writes
+  `color-mix(in srgb, var(--db-accent-1, <your colour>) 90%, transparent)`, so
+  the colour stays a reference inside CSS rather than a value computed once in
+  JavaScript. When DynamicBackgrounds 3.9.0 rewrites that variable on an image
+  change, the glow follows on its own.
+
+  That fallback also means the switch is safe without the other plugin: with the
+  variable unset, `var()` falls back to your colour and nothing changes at all.
+
+---
+
 ## 1.3.0
 
 ### Added

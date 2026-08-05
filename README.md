@@ -22,6 +22,13 @@ list backgrounds, full timestamps and the enlarged emoji picker.
 produces both the resting and the active variant, so the two never drift apart.
 Five presets are included: Lovelace, Frost, Ember, Moss and Amethyst.
 
+**Glow from background** - with
+[DynamicBackgrounds](https://github.com/Enjuchan/DynamicBackgrounds) 3.9.0 or
+newer, the glow can take its two colours from the image currently on screen and
+follow every change, including the slideshow and the hover preview. Your own
+colours stay set and act as the fallback, so the switch is harmless without that
+plugin and turning it off puts them straight back.
+
 **Background** - point the theme at any image URL.
 
 **Adjustments** - panel width, fill opacity, blur for menus and lists,

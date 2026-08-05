@@ -1,7 +1,7 @@
 /**
  * @name LovelaceSettings
  * @author Enju
- * @version 1.4.0
+ * @version 1.5.0
  * @description Settings interface for the Lovelace theme. Toggle features and adjust colours without editing CSS.
  * @source https://github.com/Enjuchan/LovelaceSettings/blob/main/LovelaceSettings.plugin.js
  * @updateUrl https://raw.githubusercontent.com/Enjuchan/LovelaceSettings/main/LovelaceSettings.plugin.js
@@ -41,6 +41,7 @@ module.exports = meta => {
     // Schalter
     hearts:          true,
     glow:            true,
+    glowFollowsBg:   false,
     panelCollapse:   true,
     mergedTitlebar:  true,
     listFills:       true,
@@ -74,6 +75,7 @@ module.exports = meta => {
   const TOGGLES = [
     { key: 'hearts',         label: 'Heart-shaped avatars', hint: 'Avatars and server icons as hearts' },
     { key: 'glow',           label: 'Glow',                 hint: 'Breathing glow on panels, servers and DMs' },
+    { key: 'glowFollowsBg',  label: 'Glow from background', hint: 'Takes both colours from the current background image' },
     { key: 'panelCollapse',  label: 'Collapsing panel',     hint: 'Bottom-left panel expands on hover' },
     { key: 'mergedTitlebar', label: 'Merged title bar',     hint: 'Window controls in the header row' },
     { key: 'listFills',      label: 'List backgrounds',     hint: 'Light fill behind the sidebars' },
@@ -142,13 +144,32 @@ module.exports = meta => {
   function buildCSS(s) {
     const out = [];
 
-    // --- Farben. Aus einem Hex entstehen beide Stufen: kraeftig fuer Hover
-    //     und aktive Zustaende, weich fuer das Grundleuchten. So muss niemand
-    //     zwei zusammengehoerende Farben von Hand abstimmen.
-    out.push(`--glow-blue: ${rgba(s.glowBlue, 0.9)}`);
-    out.push(`--glow-blue-soft: ${rgba(s.glowBlue, 0.35)}`);
-    out.push(`--glow-pink: ${rgba(s.glowPink, 0.9)}`);
-    out.push(`--glow-pink-soft: ${rgba(s.glowPink, 0.35)}`);
+    /* --- Farben. Aus einem Hex entstehen beide Stufen: kraeftig fuer Hover
+           und aktive Zustaende, weich fuer das Grundleuchten. So muss niemand
+           zwei zusammengehoerende Farben von Hand abstimmen.
+
+       Mit glowFollowsBg kommen die Toene stattdessen aus DynamicBackgrounds,
+       das --db-accent-1 und --db-accent-2 bei jedem Bildwechsel neu schreibt.
+
+       Bewusst color-mix() statt rgba(): Die Farbe bleibt damit im CSS stehen,
+       statt hier einmal ausgerechnet zu werden. Der Glow zieht beim Bildwechsel
+       ohne eine einzige Zeile JavaScript mit - kein Beobachter, der haengen
+       bleiben kann, kein Nachfuehren, das man vergessen kann.
+
+       Der Rueckfallwert ist die selbst gewaehlte Farbe. Laeuft DynamicBackgrounds
+       nicht, ist die Variable nicht gesetzt und es aendert sich schlicht nichts.
+       Der Schalter kann also auch ohne das Plugin an sein. */
+    if (s.glowFollowsBg) {
+      out.push(`--glow-blue: color-mix(in srgb, var(--db-accent-1, ${s.glowBlue}) 90%, transparent)`);
+      out.push(`--glow-blue-soft: color-mix(in srgb, var(--db-accent-1, ${s.glowBlue}) 35%, transparent)`);
+      out.push(`--glow-pink: color-mix(in srgb, var(--db-accent-2, ${s.glowPink}) 90%, transparent)`);
+      out.push(`--glow-pink-soft: color-mix(in srgb, var(--db-accent-2, ${s.glowPink}) 35%, transparent)`);
+    } else {
+      out.push(`--glow-blue: ${rgba(s.glowBlue, 0.9)}`);
+      out.push(`--glow-blue-soft: ${rgba(s.glowBlue, 0.35)}`);
+      out.push(`--glow-pink: ${rgba(s.glowPink, 0.9)}`);
+      out.push(`--glow-pink-soft: ${rgba(s.glowPink, 0.35)}`);
+    }
 
     // --- Flaechen
     out.push(`--panel-color: rgba(255, 255, 255, ${(s.panelAlpha / 100).toFixed(3)})`);
