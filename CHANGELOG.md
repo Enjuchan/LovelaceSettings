@@ -32,6 +32,31 @@ Versioning follows [Semantic Versioning](https://semver.org):
 
 ---
 
+## 1.4.0
+
+### Added
+
+- **The height of the bottom-left panel is measured and published as
+  `--lv-panel-height`.** The theme uses it to work out how far the server,
+  channel and DM lists have to stop short, so their bottom entries do not end up
+  underneath the panel where they cannot be reached.
+
+  It has to be measured because the height swings between roughly 60px for the
+  account card alone and over 370px with voice, a stream and Spotify. Two
+  earlier attempts with `:has()` rules and fixed values were off by more than
+  double, because individual parts appear in no assumption you would think to
+  make.
+
+  The value goes into a stylesheet of its own rather than an inline style on
+  `<html>`: Discord rewrites that element's `style` attribute wholesale on focus
+  changes, and the variable was simply gone afterwards.
+
+  The observer runs permanently rather than until the panel is found once.
+  Discord rebuilds the panel when you switch tabs or servers, and an observer
+  still attached to the old element never reports again.
+
+---
+
 ## 1.3.0
 
 ### Added
@@ -96,6 +121,19 @@ not to whoever uses it.
   BetterDiscord hands the button handler a dismiss function as its first
   argument; it was simply being ignored. If the write fails the notice stays on
   purpose, so the update can be retried.
+
+---
+
+## 1.1.2
+
+### Changed
+
+- The update check is documented in the README, and the claim that the plugin
+  makes no network requests at all was corrected: it fetches two files from
+  GitHub shortly after start to compare versions.
+
+- An update notice now closes itself once the update has been applied, instead
+  of staying on screen until dismissed by hand.
 
 ---
 
